@@ -4,6 +4,7 @@ import Dashboard from "./Dashboard.jsx";
 import ViewEvent from "./ViewEvent.jsx";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase.js";
+import { useParams } from "react-router-dom";
 
 export default function App() {
   const [user, loading] = useAuthState(auth);
@@ -16,20 +17,19 @@ export default function App() {
 
   return (
     <Routes>
-      {/* Root route: show Dashboard if logged in, Auth if not */}
+      {/* Root route */}
       <Route path="/" element={user ? <Dashboard /> : <Auth />} />
 
       {/* Dynamic route for shared events */}
       <Route path="/event/:shareId" element={<ViewEventWrapper />} />
 
-      {/* Optional fallback route */}
+      {/* Fallback route */}
       <Route path="*" element={<p style={{ textAlign: "center", marginTop: "50px" }}>Page Not Found</p>} />
     </Routes>
   );
 }
 
-// Wrapper component to extract shareId from URL
-import { useParams } from "react-router-dom";
+// Extract shareId from URL for ViewEvent
 function ViewEventWrapper() {
   const { shareId } = useParams();
   return <ViewEvent shareId={shareId} />;
